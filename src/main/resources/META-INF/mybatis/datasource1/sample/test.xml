@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+         
+<mapper namespace="com.glyde.mall.batch.job.sample.mapper.TestMapper">
+	
+    <update id="update" parameterType="com.glyde.mall.batch.job.sample.entity.TestDto">
+        update test set name = #{name} where id = #{id}
+    </update>
+    
+    <select id="select" resultType="com.glyde.mall.batch.job.sample.entity.TestDto">
+        select id , name from test
+    </select>
+
+</mapper>

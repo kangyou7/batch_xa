@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+         
+<mapper namespace="com.glyde.mall.batch.job.sample.mapper.PeopleMapper">
+	
+	<update id="delete" parameterType="com.glyde.mall.batch.job.sample.entity.PeopleDto">
+        delete from people where id = #{id}
+    </update>
+	
+    <update id="update" parameterType="com.glyde.mall.batch.job.sample.entity.PeopleDto">
+        update people set last_name = #{lastName} where id = #{id}
+    </update>
+    
+    <update id="insert" parameterType="com.glyde.mall.batch.job.sample.entity.PeopleDto">
+        insert into people values (#{id},#{firstName},#{lastName})
+    </update>    
+    
+    <select id="select" resultType="com.glyde.mall.batch.job.sample.entity.PeopleDto">
+        select id , first_name,last_name from people ORDER BY id ASC
+    </select>
+
+</mapper>

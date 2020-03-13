@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ~ /* Copyright (c) 2013 UNUS, Inc. ~ * All right reserved. ~ * http://www.unus.com 
+	~ * This software is the confidential and proprietary information of UNUS 
+	~ * , Inc. You shall not disclose such Confidential Information and ~ * shall 
+	use it only in accordance with the terms of the license agreement ~ * you 
+	entered into with UNUS. ~ * ~ * Revision History ~ * Author Date Description 
+	~ * =============== ================ ====================================== 
+	~ * beyondj2ee ${date} ~ */ -->
+
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "HTTP://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<!-- typeAliases 와 Mapper 설정은 SessionFactory에서 정의가 되어 있음 -->
+<!-- settings 정보만 설정 한다. -->
+
+<configuration>
+	<settings>
+		<setting name="cacheEnabled" value="false" />
+		<setting name="mapUnderscoreToCamelCase" value="true" />
+		<setting name="callSettersOnNulls" value="true"/>
+		<setting name="jdbcTypeForNull" value="NULL"/>
+	</settings>
+</configuration>

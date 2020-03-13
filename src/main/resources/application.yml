@@ -1,0 +1,81 @@
+spring:
+  profiles: 
+    active: local # -Dspring.profiles.active가 없으면 디폴트로 local
+
+mybatis:
+  mapper-locations: classpath:META-INF/mybatis/datasource1/**/*.xml, classpath:META-INF/mybatis/datasource2/**/*.xml  config-location: classpath:META-INF/mybatis/mybatis-config.xml
+  
+---
+
+spring:
+  profiles: local
+  jta:
+    enabled: true
+    atomikos:
+      datasource:
+        glyde:
+          unique-resource-name: dataSourceGlyde
+          xa-data-source-class-name: org.postgresql.xa.PGXADataSource
+          xa-properties:
+            user: glyde
+            password: glyde1234!
+            url: jdbc:postgresql://localhost:15432/glyde01?ssl=false
+        cj:
+          unique-resource-name: dataSourceCJ
+          xa-data-source-class-name: oracle.jdbc.xa.client.OracleXADataSource
+          xa-properties:
+            user: glyde
+            password: 1111
+            URL: jdbc:oracle:thin:@localhost:1521:XE
+
+logging:
+  level:
+    org.springframework.batch: debug
+    com.glyde.mall.batch: debug
+    
+---
+
+spring:
+  profiles: dev
+  jta:
+    enabled: true
+    atomikos:
+      datasource:
+        glyde:
+          unique-resource-name: dataSourceGlyde
+          xa-data-source-class-name: org.postgresql.xa.PGXADataSource
+          xa-properties:
+            user: glyde
+            password: glyde1234!
+            url: jdbc:postgresql://glyde-dev-mall-cluster.cluster-c8g3q6tvim3r.ap-northeast-2.rds.amazonaws.com:15432/glyde01?ssl=false
+        cj:
+          unique-resource-name: dataSourceCJ
+          xa-data-source-class-name: oracle.jdbc.xa.client.OracleXADataSource
+          xa-properties:
+            user: glyde
+            password: glydedev!#$1
+            url: jdbc:oracle:thin:@210.98.159.153:1523:OPENDBT
+  
+logging:
+  level:
+    org.springframework.batch: debug
+    com.glyde.mall.batch: debug
+  
+---
+
+spring:
+  profiles: stg
+
+logging:
+  level:
+    org.springframework.batch: info
+    com.glyde.mall.batch: info
+---
+
+spring:
+  profiles: prod
+  
+logging:
+  level:
+    org.springframework.batch: info
+    com.glyde.mall.batch: info  

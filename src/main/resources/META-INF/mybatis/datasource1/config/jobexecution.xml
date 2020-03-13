@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+         
+<mapper namespace="com.glyde.mall.batch.config.mapper.JobExecutionMapper">
+	
+    <update id="updateJobExecuteFlag" parameterType="com.glyde.mall.batch.config.entity.BatchJob">
+        update 배치정보테이블 set
+              batch_exe_yn = #{batchExeYn}
+            <if test="batchSvrNm != null and batchSvrNm != ''">
+            , batch_svr_nm = #{batchSvrNm}
+            </if>
+            <if test="batchExeStrtDtm != null and batchExeStrtDtm != ''">
+	        , batch_exe_strt_dtm = #{batchExeStrtDtm}
+            </if>
+            <if test="batchExeEndDtm != null and batchExeEndDtm != ''">
+            , batch_exe_end_dtm = #{batchExeEndDtm}
+            </if>
+            , lst_modp_id = #{lstModpId}
+            , lst_mod_dtm = now()
+        WHERE batch_no = #{batchId}
+    </update>
+    
+    <select id="selectBatchInfo" parameterType="com.glyde.mall.batch.config.entity.BatchJob" resultType="com.glyde.mall.batch.config.entity.BatchJob">
+        select batch_no
+             , batch_nm
+             , batch_svr_nm
+             , src_sys_nm
+             , tgt_sys_nm
+             , use_psbl_strt_dtm
+             , use_psbl_end_dtm
+             , batch_exe_yn
+             , batch_exe_strt_dtm
+             , batch_exe_end_dtm
+             , use_yn
+          from 배치정보테이블
+        where 1 = 1
+          and batch_no = #{batchId}
+          and now() between use_psbl_strt_dtm and use_psbl_end_dtm
+          and use_yn = 'y'
+          and batch_exe_yn = 'n'
+    </select>
+    
+    <update id="mergeJobExecuteLog" parameterType="com.glyde.mall.batch.config.entity.BatchLog">
+		with merge as (
+		 update 배치실행로그테이블
+		 set lst_mod_dtm        = now()
+	       , lst_modp_id        = #{lstModpId}
+	       , exe_rst_msg_cntt   = #{exeRstMsgCntt}
+	       , batch_end_dtm      = now()
+	       , batch_prog_st_cd   = #{batchProgStCd}
+	       , fail_cnt           = #{failCnt}
+	       , wrk_cnt            = #{wrkCnt}
+	     where batch_exe_log_no = #{batchExeLogNo}
+		)
+        insert into 배치실행로그테이블 (
+          batch_exe_log_no
+        , batch_no
+        , batch_nm
+        , batch_prog_st_cd
+        , exe_rst_msg_cntt
+        , batch_strt_dtm
+        , fst_regp_id
+        , fst_reg_dtm
+        , lst_modp_id
+        , lst_mod_dtm
+        )
+        select #{batchExeLogNo} as batch_exe_log_no
+             , #{batchNo} as batch_no
+             , #{batchNm} as batch_nm
+             , #{batchProgStCd} as batch_prog_st_cd
+             , #{exeRstMsgCntt} as exe_rst_msg_cntt
+             , now() as batch_strt_dtm
+             , #{fstRegpId} as fst_regp_id
+             , now() as fst_reg_dtm
+             , #{fstRegpId} as lst_modp_id
+             , now() as lst_mod_dtm
+        where not exists ( select 1 from merge )
+    </update>
+</mapper>
